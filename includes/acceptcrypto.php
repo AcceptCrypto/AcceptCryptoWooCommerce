@@ -6,13 +6,13 @@
  * Time: 22:05
  */
 
-class munt {
+class acceptcrypto {
 
 	public static function checkout($name, $amount, $currency, $background, $wc_return_url, $wc_server_callback, $wc_order_id, $email_address, $bearer) {
 
 		$response = array();
 
-		$url = "https://getmunt.com/api/v1/form";
+		$url = "https://acceptcryp.to/api/v1/form";
 
 		$curl = curl_init($url);
 		curl_setopt($curl, CURLOPT_POST, 1);
@@ -31,7 +31,7 @@ class munt {
 
 				$token = $result["token"];
 
-				$url2 = "https://getmunt.com/api/v1/payment/".$token;
+				$url2 = "https://acceptcryp.to/api/v1/payment/".$token;
 
 				$curl2 = curl_init($url2);
 				curl_setopt($curl2, CURLOPT_POST, 1);
@@ -45,32 +45,36 @@ class munt {
 
 					if(!$result2["error"]) {
 
-						$paymentToken = $result2["token"];
+						$paymentToken = $result2["payment_id"];
 
 						$response["error"] = false;
-						$response["redirect"] = "https://getmunt.com/checkout/".$paymentToken;
+						$response["redirect"] = "https://acceptcryp.to/checkout/".$paymentToken;
 
 					} else {
 
 						$response["error"] = true;
+						$response["message"] = $result2["message"];
 
 					}
 
 				} else {
 
 					$response["error"] = true;
+					$response["message"] = "An error occurred, please try again";
 
 				}
 
 			} else {
 
 				$response["error"] = true;
+				$response["message"] = $result["message"];
 
 			}
 
 		} else {
 
 			$response["error"] = true;
+			$response["message"] = "An error occurred, please try again";
 
 		}
 
@@ -82,7 +86,7 @@ class munt {
 
 		$response = array();
 
-		$url = "https://getmunt.com/api/v1/woo/".$wc_order_id;
+		$url = "https://acceptcryp.to/api/v1/woo/".$wc_order_id;
 
 		$curl = curl_init($url);
 		curl_setopt($curl, CURLOPT_HTTPHEADER, array(
